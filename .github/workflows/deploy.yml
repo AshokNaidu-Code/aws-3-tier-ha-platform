@@ -53,8 +53,10 @@ jobs:
           aws dynamodb describe-table --table-name "aws-3tier-ha-tfstate-lock" 
 
       - name: Terraform Init
-        run: terraform init
-        
+        run: |
+          cd environments/dev
+            terraform init
+
       - name: Terraform Format Check
         run: |
           cd environments/dev
