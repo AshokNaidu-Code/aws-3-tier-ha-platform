@@ -35,3 +35,27 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables
+.env
+
+tfplan
+tfplan.txt
+.terraform.lock.hcl
+
+# Environment/Sensitive
+*.tfvars
+!terraform.tfvars.example
+.env
+.DS_Store
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
