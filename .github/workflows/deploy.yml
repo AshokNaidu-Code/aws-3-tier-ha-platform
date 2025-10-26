@@ -50,8 +50,11 @@ jobs:
       - name: Verify DynamoDB Lock Table
         run: |
           echo "✓ Checking DynamoDB lock table..."
-          aws dynamodb describe-table --table-name "aws-3tier-ha-tfstate-lock"
+          aws dynamodb describe-table --table-name "aws-3tier-ha-tfstate-lock" 
 
+      - name: Terraform Init
+        run: terraform init
+        
       - name: Terraform Format Check
         run: |
           cd environments/dev
