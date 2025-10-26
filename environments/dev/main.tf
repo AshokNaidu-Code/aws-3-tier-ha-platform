@@ -16,21 +16,21 @@ provider "aws" {
 module "vpc" {
   source = "../../modules/vpc"
 
-  project_name              = var.project_name
-  vpc_cidr                  = var.vpc_cidr
-  public_subnet_cidrs       = var.public_subnet_cidrs
-  private_app_subnet_cidrs  = var.private_app_subnet_cidrs
-  private_db_subnet_cidrs   = var.private_db_subnet_cidrs
-  availability_zones        = var.availability_zones
+  project_name             = var.project_name
+  vpc_cidr                 = var.vpc_cidr
+  public_subnet_cidrs      = var.public_subnet_cidrs
+  private_app_subnet_cidrs = var.private_app_subnet_cidrs
+  private_db_subnet_cidrs  = var.private_db_subnet_cidrs
+  availability_zones       = var.availability_zones
 }
 
 # 2. ALB Module - Depends only on VPC
 module "alb" {
   source = "../../modules/alb"
 
-  project_name       = var.project_name
-  vpc_id             = module.vpc.vpc_id
-  public_subnet_ids  = module.vpc.public_subnet_ids
+  project_name      = var.project_name
+  vpc_id            = module.vpc.vpc_id
+  public_subnet_ids = module.vpc.public_subnet_ids
 }
 
 # 3. Create App Security Group (FIRST - before compute and database)
@@ -67,33 +67,33 @@ resource "aws_security_group_rule" "app_from_alb" {
 module "compute" {
   source = "../../modules/compute"
 
-  project_name        = var.project_name
-  vpc_id              = module.vpc.vpc_id
-  private_subnet_ids  = module.vpc.private_app_subnet_ids
-  alb_sg_id           = module.alb.alb_sg_id
-  target_group_arn    = module.alb.target_group_arn
-  app_sg_id           = aws_security_group.app.id  # Use created resource, not module output
-  ami_id              = var.ami_id
-  instance_type       = var.instance_type
-  min_size            = var.min_size
-  max_size            = var.max_size
-  desired_capacity    = var.desired_capacity
-  user_data_path      = "../../services/user_data.sh"
-  rds_endpoint        = module.database.rds_endpoint
-  rds_user            = var.db_username
-  rds_password        = var.db_password
-  rds_db              = var.db_name
+  project_name       = var.project_name
+  vpc_id             = module.vpc.vpc_id
+  private_subnet_ids = module.vpc.private_app_subnet_ids
+  alb_sg_id          = module.alb.alb_sg_id
+  target_group_arn   = module.alb.target_group_arn
+  app_sg_id          = aws_security_group.app.id # Use created resource, not module output
+  ami_id             = var.ami_id
+  instance_type      = var.instance_type
+  min_size           = var.min_size
+  max_size           = var.max_size
+  desired_capacity   = var.desired_capacity
+  user_data_path     = "../../services/user_data.sh"
+  rds_endpoint       = module.database.rds_endpoint
+  rds_user           = var.db_username
+  rds_password       = var.db_password
+  rds_db             = var.db_name
 }
 
 # 6. Database Module - Depends only on VPC and app security group (NO dependency on compute module)
 module "database" {
   source = "../../modules/database"
 
-  project_name           = var.project_name
-  vpc_id                 = module.vpc.vpc_id
-  private_db_subnet_ids  = module.vpc.private_db_subnet_ids
-  app_sg_id              = aws_security_group.app.id  # Use created resource
-  db_name                = var.db_name
-  db_username            = var.db_username
-  db_password            = var.db_password
+  project_name          = var.project_name
+  vpc_id                = module.vpc.vpc_id
+  private_db_subnet_ids = module.vpc.private_db_subnet_ids
+  app_sg_id             = aws_security_group.app.id # Use created resource
+  db_name               = var.db_name
+  db_username           = var.db_username
+  db_password           = var.db_password
 }
