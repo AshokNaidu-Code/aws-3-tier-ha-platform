@@ -155,7 +155,7 @@ jobs:
         run: terraform init
 
       - name: Download Plan Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: tfplan
           path: environments/dev/
@@ -181,7 +181,7 @@ jobs:
           echo "VPC ID: $VPC_ID"
 
       - name: Upload Deployment Outputs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: deployment-outputs
           path: environments/dev/outputs.json
@@ -356,7 +356,7 @@ jobs:
 
       - name: Upload Validation Report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: validation-report
           path: validation_report.md
@@ -561,7 +561,7 @@ jobs:
 
       - name: Upload HA Testing Report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ha-testing-report
           path: ha_testing_report.md
@@ -574,7 +574,7 @@ jobs:
     if: always()
     steps:
       - name: Download All Reports
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
 
       - name: Create Deployment Summary
         run: |
