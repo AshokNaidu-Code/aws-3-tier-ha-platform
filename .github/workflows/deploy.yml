@@ -56,7 +56,7 @@ jobs:
       - name: Terraform Init
         run: |
           cd environments/dev
-            terraform init
+            terraform init --reconfigure
 
       - name: Terraform Format Check
         run: |
